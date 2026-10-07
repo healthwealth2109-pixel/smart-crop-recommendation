@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Crop Recommendation System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f4faf4;color:#17351e;line-height:1.5}
+header{background:linear-gradient(135deg,#176b36,#3ca55c);color:white;padding:22px 6%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.logo{font-size:21px;font-weight:800}.nav a{color:white;text-decoration:none;margin-left:20px;font-size:14px}
+.hero{padding:70px 6%;text-align:center;background:linear-gradient(rgba(11,67,31,.78),rgba(11,67,31,.78)),url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80') center/cover;color:white}
+.hero h1{font-size:42px;margin-bottom:12px}.hero p{max-width:700px;margin:auto;font-size:18px}
+.container{max-width:1050px;margin:35px auto;padding:0 20px}
+.card{background:white;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.08);margin-bottom:28px}
+h2{margin-bottom:18px;color:#176b36}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+label{font-weight:700;display:block;margin-bottom:7px}
+select,input{width:100%;padding:13px;border:1px solid #cbdccb;border-radius:10px;font-size:15px;background:#fbfffb}
+button{margin-top:22px;width:100%;padding:15px;border:0;border-radius:10px;background:#176b36;color:white;font-size:17px;font-weight:700;cursor:pointer}
+button:hover{background:#0f5429}
+.result{display:none;border-left:6px solid #3ca55c;background:#f0fbf2}
+.crop{font-size:30px;font-weight:800;color:#176b36;margin-bottom:6px}
+.badge{display:inline-block;background:#dff4e3;color:#176b36;padding:5px 10px;border-radius:20px;font-size:13px;font-weight:bold;margin:5px 5px 12px 0}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.info{background:#f7faf7;padding:15px;border-radius:12px}.info strong{display:block;color:#176b36}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+footer{text-align:center;background:#12351c;color:white;padding:25px;margin-top:40px;font-size:14px}
+.small{font-size:13px;color:#607062;margin-top:10px}
+@media(max-width:700px){.hero h1{font-size:31px}.form-grid,.about,.info-grid{grid-template-columns:1fr}.nav{display:none}header{justify-content:center}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌱 Smart Crop Advisor</div>
+  <nav class="nav"><a href="#recommend">Recommend</a><a href="#about">About</a></nav>
+</header>
+
+<section class="hero">
+  <h1>Smart Crop Recommendation System</h1>
+  <p>Get a simple crop recommendation based on soil, season, rainfall, water availability and temperature.</p>
+</section>
+
+<main class="container">
+<section class="card" id="recommend">
+  <h2>🌾 Find a Suitable Crop</h2>
+  <div class="form-grid">
+    <div>
+      <label for="soil">Soil Type</label>
+      <select id="soil">
+        <option value="">Select soil</option><option>Black Soil</option><option>Red Soil</option>
+        <option>Alluvial Soil</option><option>Loamy Soil</option><option>Sandy Soil</option>
+      </select>
+    </div>
+    <div>
+      <label for="season">Season</label>
+      <select id="season">
+        <option value="">Select season</option><option>Kharif</option><option>Rabi</option><option>Summer</option>
+      </select>
+    </div>
+    <div>
+      <label for="rain">Rainfall</label>
+      <select id="rain">
+        <option value="">Select rainfall</option><option>Low</option><option>Medium</option><option>High</option>
+      </select>
+    </div>
+    <div>
+      <label for="water">Water Availability</label>
+      <select id="water">
+        <option value="">Select water availability</option><option>Low</option><option>Medium</option><option>High</option>
+      </select>
+    </div>
+    <div>
+      <label for="temp">Average Temperature (°C)</label>
+      <input id="temp" type="number" min="5" max="50" placeholder="e.g. 27">
+    </div>
+  </div>
+  <button onclick="recommendCrop()">🤖 Recommend Crop</button>
+  <p class="small">Educational demonstration only. Actual crop selection should consider local soil testing, climate data, irrigation and expert advice.</p>
+</section>
+
+<section class="card result" id="result"></section>
+
+<section class="card" id="about">
+  <div class="about">
+    <div>
+      <h2>📘 About This Project</h2>
+      <p>This website demonstrates how an AI-assisted development workflow can be used to create a simple agricultural decision-support application.</p>
+      <p style="margin-top:10px">The recommendation is generated using rule-based logic from the selected agricultural conditions.</p>
+    </div>
+    <div>
+      <h2>👨‍🎓 Student Details</h2>
+      <p><strong>Name:</strong> Atharva Pawar</p>
+      <p><strong>Course:</strong> B.Tech Agriculture Engineering</p>
+      <p><strong>College:</strong> D. Y. Patil Agricultural Engineering and Technology College, Talsande</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  🌱 Smart Crop Recommendation System<br>
+  Developed as an AI-assisted practical project by Atharva Pawar
+</footer>
+
+<script>
+const crops = [
+ {name:"Soybean",emoji:"🌱",soil:["Black Soil","Loamy Soil"],season:["Kharif"],rain:["Medium","High"],water:["Medium"],min:20,max:32,duration:"90–120 days",waterReq:"Medium",tip:"Suitable for warm Kharif conditions; avoid prolonged waterlogging."},
+ {name:"Cotton",emoji:"🌿",soil:["Black Soil","Loamy Soil"],season:["Kharif"],rain:["Medium","High"],water:["Medium","High"],min:21,max:35,duration:"150–180 days",waterReq:"Medium–High",tip:"Performs well in deep black soils with a long warm growing period."},
+ {name:"Rice",emoji:"🌾",soil:["Alluvial Soil","Loamy Soil"],season:["Kharif","Summer"],rain:["High","Medium"],water:["High"],min:20,max:35,duration:"110–150 days",waterReq:"High",tip:"Needs reliable water availability and performs well in suitable lowland fields."},
+ {name:"Wheat",emoji:"🌾",soil:["Alluvial Soil","Loamy Soil"],season:["Rabi"],rain:["Low","Medium"],water:["Medium","High"],min:10,max:25,duration:"120–150 days",waterReq:"Medium",tip:"Cooler Rabi temperatures are generally favourable for wheat."},
+ {name:"Chickpea",emoji:"🫘",soil:["Black Soil","Loamy Soil","Red Soil"],season:["Rabi"],rain:["Low","Medium"],water:["Low","Medium"],min:15,max:30,duration:"90–120 days",waterReq:"Low–Medium",tip:"Generally suited to well-drained soils and relatively lower water availability."},
+ {name:"Groundnut",emoji:"🥜",soil:["Red Soil","Sandy Soil","Loamy Soil"],season:["Kharif","Summer"],rain:["Medium","High"],water:["Medium"],min:20,max:32,duration:"100–130 days",waterReq:"Medium",tip:"Loose, well-drained soil is favourable for pod development."},
+ {name:"Maize",emoji:"🌽",soil:["Loamy Soil","Alluvial Soil","Black Soil"],season:["Kharif","Rabi","Summer"],rain:["Medium","High"],water:["Medium","High"],min:18,max:32,duration:"90–120 days",waterReq:"Medium–High",tip:"Needs good fertility and moisture during critical growth stages."}
+];
+
+function recommendCrop(){
+ const soil=document.getElementById("soil").value, season=document.getElementById("season").value;
+ const rain=document.getElementById("rain").value, water=document.getElementById("water").value;
+ const temp=parseFloat(document.getElementById("temp").value), result=document.getElementById("result");
+ if(!soil||!season||!rain||!water||isNaN(temp)){
+   result.style.display="block"; result.innerHTML="<h2>⚠️ Please complete all fields</h2><p>Select every option and enter the average temperature.</p>"; return;
+ }
+ const scored=crops.map(c=>{
+   let score=0;
+   if(c.soil.includes(soil))score+=3;
+   if(c.season.includes(season))score+=3;
+   if(c.rain.includes(rain))score+=2;
+   if(c.water.includes(water))score+=2;
+   if(temp>=c.min&&temp<=c.max)score+=3;
+   return {...c,score};
+ }).sort((a,b)=>b.score-a.score);
+ const c=scored[0], confidence=Math.round((c.score/13)*100);
+ result.style.display="block";
+ result.innerHTML=`
+   <div class="crop">${c.emoji} ${c.name}</div>
+   <span class="badge">Match Score: ${confidence}%</span>
+   <span class="badge">${season} Season</span>
+   <p><strong>Why this crop?</strong> ${c.tip}</p>
+   <div class="info-grid">
+    <div class="info"><strong>Suitable Soil</strong>${c.soil.join(", ")}</div>
+    <div class="info"><strong>Growing Duration</strong>${c.duration}</div>
+    <div class="info"><strong>Water Requirement</strong>${c.waterReq}</div>
+   </div>
+   <p style="margin-top:16px"><strong>Top alternatives:</strong> ${scored.slice(1,4).map(x=>x.name).join(" • ")}</p>`;
+ result.scrollIntoView({behavior:"smooth",block:"center"});
+}
+</script>
+</body>
+</html>
